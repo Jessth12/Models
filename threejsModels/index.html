@@ -3,69 +3,58 @@
     <title>threejs - models</title>
 
     <style>
-    	body{
-    		margin: 0;
-    		overflow: hidden;
-    	}
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
 
-    <canvas id="myCanvas"></canvas>
+<canvas id="myCanvas"></canvas>
 
-    <script src="three.js"></script>
-    <script src="GLTFLoader.js"></script>
+<script src="three.js"></script>
+<script src="GLTFLoader.js"></script>
 
-    <script>
-
+<script>
     var renderer,
-    	scene,
-    	camera,
-    	myCanvas = document.getElementById('myCanvas');
-
+        scene,
+        camera,
+        myCanvas = document.getElementById('myCanvas');
     //RENDERER/
     //enables web content
     renderer = new THREE.WebGLRenderer({
-      canvas: myCanvas, 
-      antialias: false
+        canvas: myCanvas,
+        antialias: false
     });
     renderer.setClearColor(0x000000); //Transparent background
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
     //CAMERA
-    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01, 1000 );
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .01, 1000 );
     camera.position.y += 5;
     camera.rotation.x = -.5;
-
     //SCENE
     scene = new THREE.Scene();
-
     //LIGHTS
     var light = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(light);
-
     var light2 = new THREE.PointLight(0xffffff, 1);
     light2.position.set(2, 2, 2);
     light2.castShadow = true;
     light2.shadowCameraVisible = true;
     scene.add(light2);
-
     //Set up shadow properties for the light
     light2.shadow.mapSize.width = 512;  // default
     light2.shadow.mapSize.height = 512; // default
     light2.shadow.camera.near = 0.5;       // default
     light2.shadow.camera.far = 500;      // default
-  
+
     var loader = new THREE.GLTFLoader();
-
     loader.load('machine3.glb', handle_load);
-
     var mesh;
-
     function handle_load(gltf) {
         console.log(gltf);
         mesh = gltf.scene;
@@ -74,35 +63,23 @@
         mesh.position.z = -10;
         mesh.castShadow = true;
         mesh.receiveShadow = false;
-		scene.add( mesh );
+        scene.add( mesh );
     }
-
-
     //RENDER LOOP
     render();
-
     var delta = 0;
     var prevTime = Date.now();
-
     function render() {
-
         delta += 0.1;
-
         if (mesh) {
-        
-            mesh.rotation.y += 0.01;
 
+            mesh.rotation.y += 0.004;
             //animation mesh
             // mesh.morphTargetInfluences[ 0 ] = Math.sin(delta) * 20.0;
         }
-
-    	renderer.render(scene, camera);
-
-    	requestAnimationFrame(render);
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
     }
-
-
-    </script>
+</script>
 </body>
 </html>
-
